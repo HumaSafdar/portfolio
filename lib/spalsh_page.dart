@@ -50,6 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       'MultiTechs Portfolio is loading ...',
                       textStyle: const TextStyle(
                           fontSize: 16,
+                          color: Colors.black,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600)),
                 ],
