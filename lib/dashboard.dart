@@ -13,15 +13,61 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard>
     with SingleTickerProviderStateMixin {
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _scaleAnimation;
+  bool _isVisible = false;
   late AnimationController _controller;
+  late Animation<double> _rotationAnimation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
+      duration: const Duration(seconds: 2),
       vsync: this,
-      duration: const Duration(seconds: 5),
-    )..repeat();
+    );
+
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
+    );
+
+    _rotationAnimation = Tween<double>(begin: 0.0, end: 0.1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.bounceOut),
+    );
+
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        _isVisible = true;
+      });
+      _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  double getResponsiveHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height * 0.08;
+  }
+
+  double getResponsiveHeightImage(BuildContext context) {
+    return MediaQuery.of(context).size.height * 0.3;
+  }
+
+  double getResponsiveWidth(BuildContext context, double factor) {
+    return MediaQuery.of(context).size.width * factor;
+  }
+
+  double getResponsiveFontSize(BuildContext context, double baseSize) {
+    return MediaQuery.of(context).size.width > 600 ? baseSize * 1.5 : baseSize;
   }
 
   @override
@@ -29,10 +75,11 @@ class _DashboardState extends State<Dashboard>
     var size = MediaQuery.of(context).size;
     double width = size.width;
     double height = size.height;
-
+    double screenWidth = MediaQuery.of(context).size.width;
+    bool isSmallScreen = screenWidth < 600;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: Stack(
         children: [
           AnimatedBuilder(
@@ -55,64 +102,154 @@ class _DashboardState extends State<Dashboard>
               );
             },
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 100),
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TypewriterAnimatedTextKit(
-                      totalRepeatCount: 2,
-                      text: const ['Hi ! MultiTechs Solutions'],
-                      textStyle: const TextStyle(
-                          fontSize: 32.0,
-                          color: Colors.pink,
-                          fontWeight: FontWeight.w900,
-                          fontFamily: 'Poppins'),
-                      speed: const Duration(milliseconds: 200),
+          !isSmallScreen
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 100, top: 20),
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AnimatedOpacity(
+                            duration: const Duration(seconds: 3),
+                            opacity: _isVisible ? 1.0 : 0.0,
+                            child: SlideTransition(
+                              position: _slideAnimation,
+                              child: Transform.rotate(
+                                angle: _rotationAnimation.value,
+                                child: ScaleTransition(
+                                  scale: _scaleAnimation,
+                                  child: TypewriterAnimatedTextKit(
+                                    text: const ['Hi ! MultiTechs Solutions'],
+                                    textStyle: TextStyle(
+                                        fontSize:
+                                            getResponsiveFontSize(context, 20),
+                                        color: Colors.pink,
+                                        fontWeight: FontWeight.w900,
+                                        fontFamily: 'Poppins'),
+                                    speed: const Duration(milliseconds: 200),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: height * 0.01,
+                          ),
+                          TypewriterAnimatedTextKit(
+                            totalRepeatCount: 2,
+                            text: const ['Software Company'],
+                            textStyle: TextStyle(
+                                fontSize: getResponsiveFontSize(context, 20),
+                                color: Colors.black,
+                                fontWeight: FontWeight.w900,
+                                fontFamily: 'Poppins'),
+                            speed: const Duration(milliseconds: 200),
+                          ),
+                          SizedBox(
+                            height: height * 0.02,
+                          ),
+                          CustomText(
+                            title:
+                                'A software company is a business that specializes in the development,\nproduction, and distribution of software products and services. These\ncompanies may create applications, programs, or systems that\naddress specific needs or challenges for individuals, businesses,\nor organizations. Software companies often focus on one or more areas,\nsuch as operating systems, productivity software, mobile apps, cloud\ncomputing, artificial intelligence, or cybersecurity solutions.',
+                            size: getResponsiveFontSize(context, 9),
+                            weight: FontWeight.w200,
+                            color: Colors.black,
+                            fontFamily: 'Poppins',
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: width * 0.1,
+                      ),
+                      ClipOval(
+                        child: Image.asset(
+                          "assets/images/pic1.jpeg",
+                          width: getResponsiveWidth(context, 0.3),
+                          height: height * 0.7,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: AnimatedOpacity(
+                            duration: const Duration(seconds: 3),
+                            opacity: _isVisible ? 1.0 : 0.0,
+                            child: SlideTransition(
+                              position: _slideAnimation,
+                              child: Transform.rotate(
+                                angle: _rotationAnimation.value,
+                                child: ScaleTransition(
+                                  scale: _scaleAnimation,
+                                  child: TypewriterAnimatedTextKit(
+                                    text: const ['Hi ! MultiTechs Solutions'],
+                                    textStyle: TextStyle(
+                                        fontSize:
+                                            getResponsiveFontSize(context, 20),
+                                        color: Colors.pink,
+                                        fontWeight: FontWeight.w900,
+                                        fontFamily: 'Poppins'),
+                                    speed: const Duration(milliseconds: 200),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.02,
+                        ),
+                        Center(
+                          child: TypewriterAnimatedTextKit(
+                            totalRepeatCount: 2,
+                            text: const ['Software Company'],
+                            textStyle: TextStyle(
+                                fontSize: getResponsiveFontSize(context, 20),
+                                color: Colors.black,
+                                fontWeight: FontWeight.w900,
+                                fontFamily: 'Poppins'),
+                            speed: const Duration(milliseconds: 200),
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.03,
+                        ),
+                        Center(
+                          child: CustomText(
+                            title:
+                                'A software company is a business that specializes in the development,\nproduction, and distribution of software products and services. These\ncompanies may create applications, programs, or systems that\naddress specific needs or challenges for individuals, businesses,\nor organizations. Software companies often focus on one or more areas,\nsuch as operating systems, productivity software, mobile apps, cloud\ncomputing, artificial intelligence, or cybersecurity solutions.',
+                            size: getResponsiveFontSize(context, 9),
+                            weight: FontWeight.w200,
+                            color: Colors.black,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.02,
+                        ),
+                        Center(
+                          child: ClipOval(
+                            child: Image.asset(
+                              "assets/images/pic1.jpeg",
+                              width: getResponsiveWidth(context, 0.7),
+                              height: height * 0.5,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: height * 0.02,
-                    ),
-                    TypewriterAnimatedTextKit(
-                      totalRepeatCount: 2,
-                      text: const ['Software Company'],
-                      textStyle: const TextStyle(
-                          fontSize: 32.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w900,
-                          fontFamily: 'Poppins'),
-                      speed: const Duration(milliseconds: 200),
-                    ),
-                    SizedBox(
-                      height: height * 0.05,
-                    ),
-                    const CustomText(
-                      title:
-                          'A software company is a business that specializes in the development,\nproduction, and distribution of software products and services. These\ncompanies may create applications, programs, or systems that\naddress specific needs or challenges for individuals, businesses,\nor organizations. Software companies often focus on one or more areas,\nsuch as operating systems, productivity software, mobile apps, cloud\ncomputing, artificial intelligence, or cybersecurity solutions.',
-                      size: 15,
-                      weight: FontWeight.w200,
-                      color: Colors.black,
-                      fontFamily: 'Poppins',
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: width * 0.1,
-                ),
-                ClipOval(
-                  child: Image.asset(
-                    "assets/images/pic1.jpeg",
-                    width: width * 0.3,
-                    height: height * 0.7,
-                    fit: BoxFit.fill,
                   ),
                 ),
-              ],
-            ),
-          ),
         ],
       ),
     );

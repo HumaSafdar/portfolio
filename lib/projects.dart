@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:portfolio_company/appbar.dart';
@@ -8,13 +10,13 @@ class ProjectsScreen extends StatefulWidget {
   State<ProjectsScreen> createState() => _ProjectsScreenState();
 }
 
-class _ProjectsScreenState extends State<ProjectsScreen> {
+class _ProjectsScreenState extends State<ProjectsScreen>
+    with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
-
+  late AnimationController _controller;
   void _nextPage() {
-    if (_currentIndex < 3) {
-      // Updated boundary condition
+    if (_currentIndex < 7) {
       setState(() {
         _currentIndex++;
       });
@@ -36,6 +38,31 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    )..repeat();
+  }
+
+  double getResponsiveHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height * 0.5;
+  }
+
+  double getResponsiveHeightImage(BuildContext context) {
+    return MediaQuery.of(context).size.height * 0.3;
+  }
+
+  double getResponsiveWidth(BuildContext context, double factor) {
+    return MediaQuery.of(context).size.width * factor;
+  }
+
+  double getResponsiveFontSize(BuildContext context, double baseSize) {
+    return MediaQuery.of(context).size.width > 600 ? baseSize * 1.5 : baseSize;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Appbar(),
@@ -53,8 +80,28 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
             Container(
               color: Colors.white.withOpacity(0.7),
             ),
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Transform.rotate(
+                  angle: _controller.value * 2 * pi,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: List.generate(18, (index) {
+                      double angle = (index * 4 * pi) / 18;
+                      return Positioned(
+                        left: 500 * cos(angle),
+                        top: 500 * sin(angle),
+                        child: const CircleAvatar(
+                            radius: 10, backgroundColor: Colors.pink),
+                      );
+                    }),
+                  ),
+                );
+              },
+            ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,10 +147,30 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                           projectLink:
                               'Rola Mex is a cleaning service app that connects customers\nwith local providers, offering QR-coded bags for secure laundry\nhandling and real-time order tracking via Google Maps. The app\nfeatures seamless online payments, membership plans, and distinct\nprofiles for customers and providers.',
                         ),
+                        ProjectCard(
+                            projectTitle: 'Hockey Institue',
+                            projectImage: 'assets/images/hockey.jpeg',
+                            projectLink:
+                                'Hockey Institute offers online Skating Coach Certification\nprograms designed to help coaches develop their skills\nand expertise in skating techniques. The comprehensive\ncourses are accessible from anywhere, providing aspiring\nand experienced coaches with the knowledge and tools\nthey need to enhance their coaching abilities and excel\nin the field of skating instruction.'),
+                        ProjectCard(
+                            projectTitle: 'Modar',
+                            projectImage: 'assets/images/luxurytransport.jpeg',
+                            projectLink:
+                                'Modar provides customizable furniture packages that\ncan be expanded with a wide range of household goods,\nincluding tableware,kitchen supplies, household textiles,\nlighting, and electronics.Committed to customer satisfaction,\nModar aims to save clients time and effort in creating a\nharmonious interior. With a focus on convenience and style,\nModar takes care of all the details so customers can enjoy\na beautifully designed space without the hassle'),
+                        ProjectCard(
+                            projectTitle: 'Gest Consultant',
+                            projectImage: 'assets/images/gest.jpeg',
+                            projectLink:
+                                'Gest Consultant offers comprehensive services to\nsupport students pursuing Persian language and\ncultural studies in Iran. They provide both short-\nand long-term Persian language courses, as well\nas enriching educational seminars and cultural\ntours. Additional services include airport pick-up\nand drop-off, loan facilities for financial assistance,\nand hostel accommodations. Bright students can\nalsobenefit from post-study visa assistance, with\nthe possibility of obtaining a 5-year Iranian residency\nafter completing their degree'),
+                        ProjectCard(
+                            projectTitle: 'Luxury Transport',
+                            projectImage: 'assets/images/luxurytransport.jpeg',
+                            projectLink:
+                                'Luxury Transport UK offers premium transportation\nservices for weddings, events, and airport transfers.\nWith a focus on elegance and reliability, clients can\npre-book luxurious vehicles for their special occasions,\nensuring a smooth and stylish experience.Whether it\na wedding, corporate event, or airport transfer, Luxury\nTransport UK guarantees exceptional service and comfort\nfor all travel needs')
                       ],
                     ),
                   ),
-                  const SizedBox(width: 20),
+                  SizedBox(width: getResponsiveWidth(context, 0.02)),
                   IconButton(
                     icon: const Icon(
                       Icons.arrow_forward,
@@ -139,75 +206,147 @@ class ProjectCard extends StatefulWidget {
 
 class _ProjectCardState extends State<ProjectCard> {
   bool _isHovered = false;
+  double getResponsiveHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height * 0.5;
+  }
+
+  double getResponsiveHeightImage(BuildContext context) {
+    return MediaQuery.of(context).size.height * 0.3;
+  }
+
+  double getResponsiveWidth(BuildContext context, double factor) {
+    return MediaQuery.of(context).size.width * factor;
+  }
+
+  double getResponsiveFontSize(BuildContext context, double baseSize) {
+    return MediaQuery.of(context).size.width > 600 ? baseSize * 1.5 : baseSize;
+  }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    double width = size.width;
     double height = size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    bool isSmallScreen = screenWidth < 600;
     return GestureDetector(
-      onTap: () {},
-      child: MouseRegion(
-        onEnter: (_) {
-          setState(() {
-            _isHovered = true;
-          });
-        },
-        onExit: (_) {
-          setState(() {
-            _isHovered = false;
-          });
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              width: width * 0.4,
-              height: height * 0.6,
-              transform: Matrix4.identity()..scale(_isHovered ? 1.05 : 1),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image.asset(
-                  widget.projectImage,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AnimatedTextKit(
-                  animatedTexts: [
-                    TypewriterAnimatedText(
-                      widget.projectTitle,
-                      textStyle: const TextStyle(
-                        fontSize: 32.0,
-                        color: Colors.pink,
-                        fontWeight: FontWeight.w900,
-                        fontFamily: 'Poppins',
+        onTap: () {},
+        child: MouseRegion(
+          onEnter: (_) {
+            setState(() {
+              _isHovered = true;
+            });
+          },
+          onExit: (_) {
+            setState(() {
+              _isHovered = false;
+            });
+          },
+          child: !isSmallScreen
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      width: getResponsiveWidth(context, 0.3),
+                      height: getResponsiveHeight(context),
+                      transform: Matrix4.identity()
+                        ..scale(_isHovered ? 1.05 : 1),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
                       ),
-                      speed: const Duration(milliseconds: 200),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.asset(
+                          widget.projectImage,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        AnimatedTextKit(
+                          animatedTexts: [
+                            TypewriterAnimatedText(
+                              widget.projectTitle,
+                              textStyle: TextStyle(
+                                fontSize: getResponsiveFontSize(context, 20),
+                                color: Colors.pink,
+                                fontWeight: FontWeight.w900,
+                                fontFamily: 'Poppins',
+                              ),
+                              speed: const Duration(milliseconds: 200),
+                            ),
+                          ],
+                          totalRepeatCount: 2,
+                        ),
+                        CustomText(
+                          title: widget.projectLink,
+                          size: getResponsiveFontSize(context, 10),
+                          color: Colors.black,
+                          fontFamily: 'Poppins',
+                          weight: FontWeight.w900,
+                        ),
+                      ],
                     ),
                   ],
-                  totalRepeatCount: 2,
+                )
+              : SingleChildScrollView(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        children: [
+                          Center(
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              width: getResponsiveWidth(context, 0.8),
+                              height: getResponsiveHeight(context),
+                              transform: Matrix4.identity()
+                                ..scale(_isHovered ? 1.05 : 1),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: Image.asset(
+                                  widget.projectImage,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: height * 0.02,
+                          ),
+                          AnimatedTextKit(
+                            animatedTexts: [
+                              TypewriterAnimatedText(
+                                widget.projectTitle,
+                                textStyle: TextStyle(
+                                  fontSize: getResponsiveFontSize(context, 20),
+                                  color: Colors.pink,
+                                  fontWeight: FontWeight.w900,
+                                  fontFamily: 'Poppins',
+                                ),
+                                speed: const Duration(milliseconds: 200),
+                              ),
+                            ],
+                            totalRepeatCount: 2,
+                          ),
+                          CustomText(
+                            title: widget.projectLink,
+                            size: getResponsiveFontSize(context, 8),
+                            color: Colors.black,
+                            fontFamily: 'Poppins',
+                            weight: FontWeight.w900,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-                CustomText(
-                  title: widget.projectLink,
-                  size: 15,
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  weight: FontWeight.w900,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+        ));
   }
 }

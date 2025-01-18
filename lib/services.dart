@@ -79,11 +79,26 @@ class _SkillsScreenState extends State<SkillsScreen>
     }
   }
 
+  double getResponsiveFontSize(BuildContext context, double baseSize) {
+    return MediaQuery.of(context).size.width > 600 ? baseSize * 1.5 : baseSize;
+  }
+
+  double getResponsiveHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height * 0.05;
+  }
+
+  double getResponsiveHeightIcon(BuildContext context) {
+    return MediaQuery.of(context).size.height * 0.02;
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     double width = size.width;
     double height = size.height;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    bool isSmallScreen = screenWidth < 600;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: const Appbar(),
@@ -94,7 +109,7 @@ class _SkillsScreenState extends State<SkillsScreen>
             Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/modar final (1).jpg'),
+                  image: AssetImage('assets/images/pic1.jpeg'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -122,66 +137,116 @@ class _SkillsScreenState extends State<SkillsScreen>
                 );
               },
             ),
-            PageView.builder(
-              controller: _pageController,
-              itemCount: services.length,
-              itemBuilder: (context, index) {
-                return AnimatedOpacity(
-                  opacity: _currentIndex == index ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 500),
-                  child: AnimatedSlide(
-                    offset:
-                        _currentIndex == index ? Offset(0, 0) : Offset(0, 0.5),
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeOut,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TypewriterAnimatedTextKit(
-                          totalRepeatCount: 2,
-                          text: [services[index]['name']!],
-                          textStyle: const TextStyle(
-                            fontSize: 32.0,
-                            color: Colors.pink,
-                            fontWeight: FontWeight.w900,
-                            fontFamily: 'Poppins',
+            !isSmallScreen
+                ? PageView.builder(
+                    controller: _pageController,
+                    itemCount: services.length,
+                    itemBuilder: (context, index) {
+                      return AnimatedOpacity(
+                        opacity: _currentIndex == index ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 500),
+                        child: AnimatedSlide(
+                          offset: _currentIndex == index
+                              ? const Offset(0, 0)
+                              : Offset(0, 0.5),
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeOut,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TypewriterAnimatedTextKit(
+                                totalRepeatCount: 2,
+                                text: [services[index]['name']!],
+                                textStyle: TextStyle(
+                                  fontSize: getResponsiveFontSize(context, 18),
+                                  color: Colors.pink,
+                                  fontWeight: FontWeight.w900,
+                                  fontFamily: 'Poppins',
+                                ),
+                                speed: const Duration(milliseconds: 200),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                services[index]['details']!,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize:
+                                        getResponsiveFontSize(context, 10),
+                                    fontWeight: FontWeight.w200,
+                                    fontFamily: 'Poppins',
+                                    color: Colors.black),
+                              ),
+                            ],
                           ),
-                          speed: const Duration(milliseconds: 200),
                         ),
-                        const SizedBox(height: 10),
-                        Text(
-                          services[index]['details']!,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w200,
-                              fontFamily: 'Poppins',
-                              color: Colors.black),
+                      );
+                    },
+                  )
+                : PageView.builder(
+                    controller: _pageController,
+                    itemCount: services.length,
+                    itemBuilder: (context, index) {
+                      return AnimatedOpacity(
+                        opacity: _currentIndex == index ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 500),
+                        child: AnimatedSlide(
+                          offset: _currentIndex == index
+                              ? Offset(0, 0)
+                              : Offset(0, 0.5),
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeOut,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TypewriterAnimatedTextKit(
+                                totalRepeatCount: 2,
+                                text: [services[index]['name']!],
+                                textStyle: TextStyle(
+                                  fontSize: getResponsiveFontSize(context, 15),
+                                  color: Colors.pink,
+                                  fontWeight: FontWeight.w900,
+                                  fontFamily: 'Poppins',
+                                ),
+                                speed: const Duration(milliseconds: 200),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                services[index]['details']!,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: getResponsiveFontSize(context, 8),
+                                    fontWeight: FontWeight.w200,
+                                    fontFamily: 'Poppins',
+                                    color: Colors.black),
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
             Positioned(
-              left: 16,
+              left: isSmallScreen ? 5 : 16,
               child: IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_back_ios,
                   color: Colors.black,
-                  size: 30,
+                  size: isSmallScreen
+                      ? getResponsiveHeightIcon(context)
+                      : getResponsiveHeight(context),
                 ),
                 onPressed: _previousPage,
               ),
             ),
             Positioned(
-              right: 16,
+              right: isSmallScreen ? 5 : 16,
               child: IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_forward_ios,
                   color: Colors.black,
-                  size: 30,
+                  size: isSmallScreen
+                      ? getResponsiveHeightIcon(context)
+                      : getResponsiveHeight(context),
                 ),
                 onPressed: _nextPage,
               ),
