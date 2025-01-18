@@ -261,11 +261,6 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen>
                                 'https://www.linkedin.com/\ncompany/multitechs-solutions/',
                           ),
                           ContactCard(
-                            icon: FontAwesomeIcons.webflow,
-                            label: 'Website',
-                            value: 'https://www.multitechs\nsolutions.com',
-                          ),
-                          ContactCard(
                             icon: FontAwesomeIcons.envelope,
                             label: 'Email',
                             value: 'anees.ahmad@multitechs\nsolutions.com',

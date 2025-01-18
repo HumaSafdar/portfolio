@@ -36,7 +36,7 @@ class _SkillsScreenState extends State<SkillsScreen>
           'Our skilled team delivers high-performing, responsive websites using\ntechnologies like WordPress, ensuring your online presence is\nimpactful and aligns with your business goals.  '
     },
     {
-      'name': 'SOFTWARE DEVELOPMENT & CUSTOM SOLUTIONS',
+      'name': 'CUSTOM SOFTWARE DEVELOPMENT & CUSTOM SOLUTIONS',
       'details':
           'Our custom software development services are designed to provide\nsolutions that are tailored to the unique needs of your business.We\ndeliver scalable, secure, and efficient software products that\nhelp optimize operations and drive growth.'
     },

@@ -154,7 +154,7 @@ class _ProjectsScreenState extends State<ProjectsScreen>
                                 'Hockey Institute offers online Skating Coach Certification\nprograms designed to help coaches develop their skills\nand expertise in skating techniques. The comprehensive\ncourses are accessible from anywhere, providing aspiring\nand experienced coaches with the knowledge and tools\nthey need to enhance their coaching abilities and excel\nin the field of skating instruction.'),
                         ProjectCard(
                             projectTitle: 'Modar',
-                            projectImage: 'assets/images/luxurytransport.jpeg',
+                            projectImage: 'assets/images/modar final (1).jpg',
                             projectLink:
                                 'Modar provides customizable furniture packages that\ncan be expanded with a wide range of household goods,\nincluding tableware,kitchen supplies, household textiles,\nlighting, and electronics.Committed to customer satisfaction,\nModar aims to save clients time and effort in creating a\nharmonious interior. With a focus on convenience and style,\nModar takes care of all the details so customers can enjoy\na beautifully designed space without the hassle'),
                         ProjectCard(
