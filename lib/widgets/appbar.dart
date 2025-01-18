@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio_company/about.dart';
-import 'package:portfolio_company/contact-us.dart';
-import 'package:portfolio_company/custom_text.dart';
-import 'package:portfolio_company/fade_transition.dart';
-import 'package:portfolio_company/home_screen.dart';
-import 'package:portfolio_company/index_provide.dart';
-import 'package:portfolio_company/projects.dart';
-import 'package:portfolio_company/services.dart';
+import 'package:portfolio_company/widgets/about.dart';
+import 'package:portfolio_company/screens/contact-us.dart';
+import 'package:portfolio_company/widgets/custom_text.dart';
+import 'package:portfolio_company/widgets/fade_transition.dart';
+import 'package:portfolio_company/screens/home_screen.dart';
+import 'package:portfolio_company/provider/index_provide.dart';
+import 'package:portfolio_company/screens/projects.dart';
+import 'package:portfolio_company/screens/services.dart';
 import 'package:provider/provider.dart';
 
 class Appbar extends StatefulWidget implements PreferredSizeWidget {

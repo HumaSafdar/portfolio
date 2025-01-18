@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:portfolio_company/custom_text.dart';
+import 'package:portfolio_company/widgets/custom_text.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:portfolio_company/appbar.dart';
+import 'package:portfolio_company/widgets/appbar.dart';
 
 class ContactDetailsScreen extends StatefulWidget {
   @override
@@ -281,13 +281,23 @@ class _ContactDetailsScreenState extends State<ContactDetailsScreen>
   }
 }
 
-class ContactCard extends StatelessWidget {
+class ContactCard extends StatefulWidget {
   final IconData icon;
   final String label;
   final String value;
 
-  const ContactCard(
-      {required this.icon, required this.label, required this.value});
+  const ContactCard({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  _ContactCardState createState() => _ContactCardState();
+}
+
+class _ContactCardState extends State<ContactCard> {
+  bool isHovered = false;
 
   Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -297,39 +307,25 @@ class ContactCard extends StatelessWidget {
     }
   }
 
-  double getResponsiveHeight(BuildContext context) {
-    return MediaQuery.of(context).size.height * 0.5;
-  }
-
-  double getResponsiveHeightImage(BuildContext context) {
-    return MediaQuery.of(context).size.height * 0.3;
-  }
-
-  double getResponsiveWidth(BuildContext context, double factor) {
-    return MediaQuery.of(context).size.width * factor;
-  }
-
   double getResponsiveFontSize(BuildContext context, double baseSize) {
     return MediaQuery.of(context).size.width > 600 ? baseSize * 1.5 : baseSize;
   }
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    double screenWidth = MediaQuery.of(context).size.width;
     return Expanded(
       child: Column(
         children: [
           CircleAvatar(
             backgroundColor: Colors.black,
             child: Icon(
-              icon,
+              widget.icon,
               color: Colors.white,
             ),
           ),
           const SizedBox(height: 10),
           Text(
-            label,
+            widget.label,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: getResponsiveFontSize(context, 10),
@@ -339,17 +335,21 @@ class ContactCard extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 5),
-          GestureDetector(
-            onTap: () => _launchURL(value),
-            child: Text(
-              value,
-              style: TextStyle(
-                fontSize: getResponsiveFontSize(context, 8),
-                fontFamily: 'Poppins',
-                color: Colors.black,
-                decoration: TextDecoration.underline,
+          MouseRegion(
+            onEnter: (_) => setState(() => isHovered = true),
+            onExit: (_) => setState(() => isHovered = false),
+            child: GestureDetector(
+              onTap: () => _launchURL(widget.value),
+              child: Text(
+                widget.value,
+                style: TextStyle(
+                  fontSize: getResponsiveFontSize(context, 8),
+                  fontFamily: 'Poppins',
+                  color: isHovered ? Colors.pink : Colors.black,
+                  decoration: TextDecoration.underline,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
           ),
         ],

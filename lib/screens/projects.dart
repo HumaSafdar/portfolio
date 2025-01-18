@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:portfolio_company/appbar.dart';
-import 'package:portfolio_company/custom_text.dart';
+import 'package:portfolio_company/widgets/appbar.dart';
+import 'package:portfolio_company/widgets/custom_text.dart';
 
 class ProjectsScreen extends StatefulWidget {
   @override

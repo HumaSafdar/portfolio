@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:portfolio_company/dashboard.dart';
+import 'package:portfolio_company/screens/dashboard.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:portfolio_company/home_screen.dart';
+import 'package:portfolio_company/screens/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

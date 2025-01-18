@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio_company/about.dart';
-import 'package:portfolio_company/contact-us.dart';
-import 'package:portfolio_company/dashboard.dart';
-import 'package:portfolio_company/index_provide.dart';
-import 'package:portfolio_company/projects.dart';
-import 'package:portfolio_company/routing_provider.dart';
-import 'package:portfolio_company/services.dart';
+import 'package:portfolio_company/widgets/about.dart';
+import 'package:portfolio_company/screens/contact-us.dart';
+import 'package:portfolio_company/screens/dashboard.dart';
+import 'package:portfolio_company/provider/index_provide.dart';
+import 'package:portfolio_company/screens/projects.dart';
+import 'package:portfolio_company/provider/routing_provider.dart';
+import 'package:portfolio_company/screens/services.dart';
 
 import 'package:provider/provider.dart';
 
